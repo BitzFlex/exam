@@ -1,0 +1,8 @@
+  def getStatus2(url) do
+    result =
+      case HTTPoison.get(url) do
+        {:ok, %{status_code: status_code}} -> status_code
+        {:error, %{id: nil, reason: reason}} -> reason
+      end
+    result
+  end

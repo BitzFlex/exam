@@ -30,17 +30,30 @@ defmodule WebClient  do
   def getMulti do
     for _ <- 1..100_000,
       do: spawn(fn -> HTTPoison.get("https://www.bitzflex.com",[],[timeout: 60_000,  recv_timeout: 60_000]) |> IO.inspect  end)
-      # do: spawn(fn -> getAndCheck()  end)
-      # do: spawn(fn -> HTTPoison.get("http://localhost:5525/api/v1/time",[],[recv_timeout: 60_000]) |> IO.inspect  end)
-      # do: spawn(fn -> HTTPoison.get("http://localhost:5525/api/v1/time",[],[timeout: 60_000,  recv_timeout: 60_000]) |> IO.inspect  end)
-      # do: spawn(fn -> HTTPoison.get("www.bitzflex.com",[],[timeout: 60_000,  recv_timeout: 60_000]) |> IO.inspect  end)
   end
 
-  def getMulti(url) do
+  def getMultiRequest(url) do
     :ok = :hackney_pool.start_pool(:large_pool, [timeout: 60_000, max_connections: 10_000])
     for _ <- 1..10_000,
       do: spawn(fn -> HTTPoison.get(url,[],[recv_timeout: 8_000, hackney: [pool: :large_pool]]) |> IO.inspect  end)
-      # do: spawn(fn -> HTTPoison.get("http://localhost:5525/api/v1/time",[],[recv_timeout: 60_000, hackney: [pool: :large_pool]]) |> IO.inspect  end)
   end
+
+
+
+  def getStatus({:ok,response}) do
+    %{status_code: status_code} = response
+    status_code
+  end
+
+  def getStatus({:error, response}) do
+    %{id: nil, reason: reason} = response
+    reason
+  end
+
+  def getStatus(url) do
+    HTTPoison.get(url) |> getStatus
+  end
+
+
 
 end
