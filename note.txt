@@ -6,3 +6,16 @@
       end
     result
   end
+
+
+
+Enum.to_list(1..45) |> Enum.shuffle |> Enum.slice(0..5) |> Enum.sort |> Enum.join(", ") |> IO.puts
+
+%{"name" => name} =  %{:a => 1, 2 => :b , "name" => "bh"}
+
+{:ok, %{status_code: result}}  = HTTPoison.get("http://www.ntels.com",[],[recv_timeout: 8_000])
+
+{:ok, %{request: %{url: url}}}  = HTTPoison.get("http://www.ntels.com",[],[recv_timeout: 8_000])
+
+{_, cookie} =  response |> Map.get(:headers) |> Enum.filter(fn {key, _} -> key == "Set-Cookie" end) |> Enum.at(0)
+
